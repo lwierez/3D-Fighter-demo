@@ -23,6 +23,6 @@ public class PlayerController : MonoBehaviour
 
 		transform.Translate(Vector3.forward * speed * Time.deltaTime);
 		transform.Rotate(Vector3.right, rotationSpeedVertical * Time.deltaTime * verticalInput);
-		transform.Rotate(Vector3.forward, rotationSpeedHorizontal * Time.deltaTime * horizontalInput);
+		transform.Rotate(Vector3.back, rotationSpeedHorizontal * Time.deltaTime * horizontalInput);
     }
 }
