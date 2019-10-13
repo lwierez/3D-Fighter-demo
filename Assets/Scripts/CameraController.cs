@@ -11,9 +11,6 @@ public class CameraController : MonoBehaviour
     void Start()
     {
 		Offset = new Vector3(0.0f, 1.0f, -3.5f);
-
-		//Vector3 rotatedVector3 = Quaternion.AngleAxis(45, Vector3.forward) * new Vector3(1, 1, 1);
-		//Debug.Log(rotatedVector3);
     }
 
     void Update()
