@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
 	void Shoot()
 	{
 		delayCount = 0;
-		Instantiate(weapon, transform.position - Vector3.up, Quaternion.identity);
+		GameObject newMissile = Instantiate(weapon, transform.position - transform.rotation * Vector3.up, Quaternion.identity);
+		newMissile.GetComponent<Missile>().newRotation = transform.rotation;
 	}
 }
