@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+	// Object followed by the camera
 	public GameObject player;
 
+	// Vector between the camera and the followed object
 	protected Vector3 Offset;
 
     void Start()
@@ -15,10 +17,9 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-		Vector3 rotatedOffset = Quaternion.AngleAxis(player.transform.eulerAngles.y, Vector3.up) * Offset;
-		transform.position = player.transform.position + rotatedOffset;
-
-		Vector3 positionDifference = player.transform.position + Vector3.up - transform.position;
-		transform.forward = positionDifference.normalized;
+		// Placing the camera behind the player
+		transform.position = player.transform.position + Quaternion.AngleAxis(player.transform.eulerAngles.y, Vector3.up) * Offset;
+		// Pointing the camera on the player
+		transform.forward = (player.transform.position + Vector3.up - transform.position).normalized;
 	}
 }
