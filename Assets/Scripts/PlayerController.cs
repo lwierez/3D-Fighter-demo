@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
 	public float rotationSpeedVertical = 45.0f;
 	// Rotation speed when inclining the plane
 	public float rotationSpeedHorizontal = 90.0f;
+	// Materials for aim line
+	public Material whiteMaterial;
+	public Material redMaterial;
 
 	// Input of the horizontal axis
 	protected float horizontalInput;
@@ -23,6 +26,10 @@ public class PlayerController : MonoBehaviour
 	protected float delayCount;
 	// Line Renderer
 	protected LineRenderer lineRenderer;
+	// Hit for aime line
+	protected RaycastHit hitResult;
+	// Result of the aim line raycast
+	protected bool isTargetInSight;
 
 	void Start()
     {
@@ -45,8 +52,20 @@ public class PlayerController : MonoBehaviour
 			Shoot();
 		}
 
+		// Locking the aimed object
+		isTargetInSight = Physics.Raycast(transform.position + transform.forward * 2, transform.forward, out hitResult, 1000.0f);
+
 		lineRenderer.SetPosition(0, transform.position + transform.forward * 2);
-		lineRenderer.SetPosition(1, transform.position + transform.forward * 257);
+		lineRenderer.SetPosition(1, transform.position + transform.forward * 1007);
+
+		if (isTargetInSight)
+		{
+			lineRenderer.material = redMaterial;
+		}
+		else
+		{
+			lineRenderer.material = whiteMaterial;
+		}
 	}
 
     void FixedUpdate()
@@ -68,10 +87,6 @@ public class PlayerController : MonoBehaviour
 	{
 		// Reset missile reload time
 		delayCount = 0;
-
-		// Locking the aimed object
-		RaycastHit hitResult;
-		bool isTargetInSight = Physics.Raycast(transform.position + transform.forward * 2, transform.forward, out hitResult, 255.0f);
 
 		// Instanciate and orientate the missile if a target is locked
 		if (isTargetInSight)
