@@ -21,12 +21,16 @@ public class PlayerController : MonoBehaviour
 	protected float missileDelay;
 	// Delay since the last shot
 	protected float delayCount;
+	// Line Renderer
+	protected LineRenderer lineRenderer;
 
 	void Start()
     {
 		// Initializing values for the missile reloading time
 		missileDelay = 2.0f;
 		delayCount = 0.0f;
+
+		lineRenderer = GetComponent<LineRenderer>();
 	}
 
 	void Update()
@@ -40,6 +44,9 @@ public class PlayerController : MonoBehaviour
 		{
 			Shoot();
 		}
+
+		lineRenderer.SetPosition(0, transform.position + transform.forward * 2);
+		lineRenderer.SetPosition(1, transform.position + transform.forward * 257);
 	}
 
     void FixedUpdate()
@@ -54,13 +61,26 @@ public class PlayerController : MonoBehaviour
 		transform.Rotate(Vector3.back, rotationSpeedHorizontal * Time.deltaTime * horizontalInput);
 	}
 
+	/// <summary>
+	/// Make the player shoot a missile
+	/// </summary>
 	void Shoot()
 	{
 		// Reset missile reload time
 		delayCount = 0;
 
-		// Instanciate and orientate the missile
-		GameObject newMissile = Instantiate(weapon, transform.position - transform.rotation * Vector3.up, Quaternion.identity);
-		newMissile.transform.rotation = transform.rotation;
+		// Locking the aimed object
+		RaycastHit hitResult;
+		bool isTargetInSight = Physics.Raycast(transform.position + transform.forward * 2, transform.forward, out hitResult, 255.0f);
+
+		// Instanciate and orientate the missile if a target is locked
+		if (isTargetInSight)
+		{
+			//Debug.Log(hitResult.collider.gameObject.name);
+
+			GameObject newMissile = Instantiate(weapon, transform.position - transform.rotation * Vector3.up, Quaternion.identity);
+			newMissile.transform.rotation = transform.rotation;
+			newMissile.GetComponent<Missile>().LockTo(hitResult.collider.gameObject);
+		}
 	}
 }
