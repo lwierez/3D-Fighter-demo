@@ -12,9 +12,6 @@ public class PlayerController : MonoBehaviour
 	public float rotationSpeedVertical = 45.0f;
 	// Rotation speed when inclining the plane
 	public float rotationSpeedHorizontal = 90.0f;
-	// Materials for aim line
-	public Material whiteMaterial;
-	public Material redMaterial;
 
 	// Input of the horizontal axis
 	protected float horizontalInput;
@@ -24,12 +21,8 @@ public class PlayerController : MonoBehaviour
 	protected float missileDelay;
 	// Delay since the last shot
 	protected float delayCount;
-	// Line Renderer
-	protected LineRenderer lineRenderer;
-	// Hit for aime line
-	protected RaycastHit hitResult;
-	// Result of the aim line raycast
-	protected bool isTargetInSight;
+	// Lock on script
+	protected LockOn lockOn;
 
 	void Start()
     {
@@ -37,7 +30,7 @@ public class PlayerController : MonoBehaviour
 		missileDelay = 2.0f;
 		delayCount = 0.0f;
 
-		lineRenderer = GetComponent<LineRenderer>();
+		lockOn = GetComponentInChildren<LockOn>();
 	}
 
 	void Update()
@@ -50,21 +43,6 @@ public class PlayerController : MonoBehaviour
 		else if (Input.GetAxis("Fire1") > 0)
 		{
 			Shoot();
-		}
-
-		// Locking the aimed object
-		isTargetInSight = Physics.Raycast(transform.position + transform.forward * 2, transform.forward, out hitResult, 1000.0f);
-
-		lineRenderer.SetPosition(0, transform.position + transform.forward * 2);
-		lineRenderer.SetPosition(1, transform.position + transform.forward * 1007);
-
-		if (isTargetInSight)
-		{
-			lineRenderer.material = redMaterial;
-		}
-		else
-		{
-			lineRenderer.material = whiteMaterial;
 		}
 	}
 
@@ -89,13 +67,13 @@ public class PlayerController : MonoBehaviour
 		delayCount = 0;
 
 		// Instanciate and orientate the missile if a target is locked
-		if (isTargetInSight)
+		//if (isTargetInSight)
 		{
 			//Debug.Log(hitResult.collider.gameObject.name);
 
 			GameObject newMissile = Instantiate(weapon, transform.position - transform.rotation * Vector3.up, Quaternion.identity);
 			newMissile.transform.rotation = transform.rotation;
-			newMissile.GetComponent<Missile>().LockTo(hitResult.collider.gameObject);
+			newMissile.GetComponent<Missile>().LockTo(lockOn.getLockedTarget());
 		}
 	}
 }
