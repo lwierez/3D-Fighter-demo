@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
 		{
 			delayCount += Time.deltaTime;
 		}
-		else if (Input.GetAxis("Fire1") > 0)
+		else if (Input.GetAxis("Fire1") > 0 || Input.GetAxis("Xbox_RightTrigger") > 0.7)
 		{
 			Shoot();
 		}
@@ -67,10 +67,8 @@ public class PlayerController : MonoBehaviour
 		delayCount = 0;
 
 		// Instanciate and orientate the missile if a target is locked
-		//if (isTargetInSight)
+		if (lockOn.isTargetInSight())
 		{
-			//Debug.Log(hitResult.collider.gameObject.name);
-
 			GameObject newMissile = Instantiate(weapon, transform.position - transform.rotation * Vector3.up, Quaternion.identity);
 			newMissile.transform.rotation = transform.rotation;
 			newMissile.GetComponent<Missile>().LockTo(lockOn.getLockedTarget());

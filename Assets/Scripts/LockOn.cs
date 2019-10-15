@@ -11,6 +11,7 @@ public class LockOn : MonoBehaviour
 	protected List<GameObject> lockableTargetsUIs;
 	protected GameObject lockedObject;
 	protected int lockedObjectIndex;
+	protected bool canLock = true;
 
 	void Start()
 	{
@@ -47,8 +48,9 @@ public class LockOn : MonoBehaviour
 			lockedObjectIndex = 0;
 		}
 
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (Input.GetAxis("Xbox_LeftTrigger") > 0.7 && canLock)
 		{
+			canLock = false;
 			if (lockableTargets.Count != 0)
 			{
 				if (lockedObjectIndex + 1 < lockableTargets.Count)
@@ -61,6 +63,10 @@ public class LockOn : MonoBehaviour
 				}
 			}
 			lockedObject = lockableTargets[lockedObjectIndex];
+		}
+		if (Input.GetAxis("Xbox_LeftTrigger") < 0.1)
+		{
+			canLock = true;
 		}
 	}
 
@@ -77,5 +83,17 @@ public class LockOn : MonoBehaviour
 	public GameObject getLockedTarget()
 	{
 		return this.lockedObject;
+	}
+
+	public bool isTargetInSight()
+	{
+		if (this.lockedObject != null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
