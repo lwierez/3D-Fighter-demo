@@ -21,5 +21,6 @@ public class CameraController : MonoBehaviour
 		transform.position = player.transform.position + Quaternion.AngleAxis(player.transform.eulerAngles.y, Vector3.up) * Offset;
 		// Pointing the camera on the player
 		transform.forward = (player.transform.position + Vector3.up - transform.position).normalized;
+		transform.Rotate(Vector3.right, 30.0f * Input.GetAxis("VerticalView"));
 	}
 }

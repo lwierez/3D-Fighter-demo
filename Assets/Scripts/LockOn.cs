@@ -43,18 +43,37 @@ public class LockOn : MonoBehaviour
 		// For each target that can be locked
 		foreach (GameObject target in lockableTargets)
 		{
-			// We create a sprite to indicate the possibilty to lock on
-			GameObject newUIElement = Instantiate(lockUI, target.transform.position, Quaternion.identity, Canvas.transform);
-			// If one of these objects is the already locked target we draw the prefab with a different color
-			// We also update the index of the object and indicate the target still in sight
-			if (target == lockedObject)
+			// We test if the GameObject is in direct sight
+			RaycastHit raycastHit;
+			Vector3 Offset = target.transform.position - GetComponentInParent<Transform>().position;
+			float distanceToTarget = Offset.magnitude;
+			Vector3 directionToTarget = Offset.normalized;
+
+			// Excluding unwanted layers
+			LayerMask layerMask = 1 << 5;
+			layerMask |= 1 << 10;
+			layerMask |= 1 << 13;
+			layerMask = ~layerMask;
+
+			bool rayColliderToTargetResult = Physics.Raycast(GetComponentInParent<Transform>().position, directionToTarget, out raycastHit, distanceToTarget, layerMask);
+			if (rayColliderToTargetResult)
 			{
-				stillLockedObjectOnSight = true;
-				lockedObjectIndex = lockableTargets.IndexOf(target);
-				newUIElement.GetComponent<SpriteRenderer>().color = Color.red;
+				if (raycastHit.collider.gameObject == target)
+				{
+					// We create a sprite to indicate the possibilty to lock on
+					GameObject newUIElement = Instantiate(lockUI, target.transform.position, Quaternion.identity, Canvas.transform);
+					// If one of these objects is the already locked target we draw the prefab with a different color
+					// We also update the index of the object and indicate the target still in sight
+					if (target == lockedObject)
+					{
+						stillLockedObjectOnSight = true;
+						lockedObjectIndex = lockableTargets.IndexOf(target);
+						newUIElement.GetComponent<SpriteRenderer>().color = Color.red;
+					}
+					// Each sprite is added to the list
+					lockableTargetsUIs.Add(newUIElement);
+				}
 			}
-			// Each sprite is added to the list
-			lockableTargetsUIs.Add(newUIElement);
 		}
 
 		// We the previously locked target weren't found during the collided objects scan
