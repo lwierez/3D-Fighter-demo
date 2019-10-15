@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 	protected float missileDelay;
 	// Delay since the last shot
 	protected float delayCount;
-	// Lock on script
+	// Script that manage the locking system
 	protected LockOn lockOn;
 
 	void Start()
