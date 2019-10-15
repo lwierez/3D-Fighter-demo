@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
 		{
 			delayCount += Time.deltaTime;
 		}
-		else if (Input.GetAxis("Fire1") > 0 || Input.GetAxis("Xbox_RightTrigger") > 0.7)
+		else if (Input.GetAxis("Shoot") > 0.6)
 		{
 			Shoot();
 		}

@@ -66,7 +66,7 @@ public class LockOn : MonoBehaviour
 		}
 
 		// The lock move is restricted so the target won't change if the player let the trigger pushed
-		if (Input.GetAxis("Xbox_LeftTrigger") > 0.7 && canLock)
+		if (Input.GetAxis("Lock") > 0.6 && canLock)
 		{
 			canLock = false;
 			// If there is at least a target
@@ -85,7 +85,7 @@ public class LockOn : MonoBehaviour
 			}
 			lockedObject = lockableTargets[lockedObjectIndex];
 		}
-		if (Input.GetAxis("Xbox_LeftTrigger") < 0.1)
+		if (Input.GetAxis("Lock") < 0.1)
 		{
 			canLock = true;
 		}
