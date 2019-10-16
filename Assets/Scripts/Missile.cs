@@ -25,7 +25,10 @@ public class Missile : MonoBehaviour
 	void FixedUpdate()
 	{
 		// Make the missile follow the target
-		transform.LookAt(lockedObject.transform);
+		if (lockedObject != null)
+		{
+			transform.LookAt(lockedObject.transform);
+		}
 		// Make the missile forward
 		transform.Translate(Vector3.forward * 50 * Time.deltaTime);
 	}
