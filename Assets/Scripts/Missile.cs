@@ -38,4 +38,10 @@ public class Missile : MonoBehaviour
 	{
 		this.lockedObject = lockedObject;
 	}
+
+	void OnCollisionEnter(Collision collision)
+	{
+		Destroy(gameObject);
+		Destroy(collision.gameObject);
+	}
 }

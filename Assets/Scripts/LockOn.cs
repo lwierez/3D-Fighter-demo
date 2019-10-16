@@ -41,38 +41,47 @@ public class LockOn : MonoBehaviour
 		bool stillLockedObjectOnSight = false;
 
 		// For each target that can be locked
-		foreach (GameObject target in lockableTargets)
+		for (int i = 0 ; i < lockableTargets.Count ; i++)
 		{
-			// We test if the GameObject is in direct sight
-			RaycastHit raycastHit;
-			Vector3 Offset = target.transform.position - GetComponentInParent<Transform>().position;
-			float distanceToTarget = Offset.magnitude;
-			Vector3 directionToTarget = Offset.normalized;
-
-			// Excluding unwanted layers
-			LayerMask layerMask = 1 << 5;
-			layerMask |= 1 << 10;
-			layerMask |= 1 << 13;
-			layerMask = ~layerMask;
-
-			bool rayColliderToTargetResult = Physics.Raycast(GetComponentInParent<Transform>().position, directionToTarget, out raycastHit, distanceToTarget, layerMask);
-			if (rayColliderToTargetResult)
+			GameObject target = lockableTargets[i];
+			// We ensure the GameObject still exist
+			if (target != null)
 			{
-				if (raycastHit.collider.gameObject == target)
+				// We test if the GameObject is in direct sight
+				RaycastHit raycastHit;
+				Vector3 Offset = target.transform.position - GetComponentInParent<Transform>().position;
+				float distanceToTarget = Offset.magnitude;
+				Vector3 directionToTarget = Offset.normalized;
+
+				// Excluding unwanted layers
+				LayerMask layerMask = 1 << 5;
+				layerMask |= 1 << 10;
+				layerMask |= 1 << 13;
+				layerMask = ~layerMask;
+
+				bool rayColliderToTargetResult = Physics.Raycast(GetComponentInParent<Transform>().position, directionToTarget, out raycastHit, distanceToTarget, layerMask);
+				if (rayColliderToTargetResult)
 				{
-					// We create a sprite to indicate the possibilty to lock on
-					GameObject newUIElement = Instantiate(lockUI, target.transform.position, Quaternion.identity, Canvas.transform);
-					// If one of these objects is the already locked target we draw the prefab with a different color
-					// We also update the index of the object and indicate the target still in sight
-					if (target == lockedObject)
+					if (raycastHit.collider.gameObject == target)
 					{
-						stillLockedObjectOnSight = true;
-						lockedObjectIndex = lockableTargets.IndexOf(target);
-						newUIElement.GetComponent<SpriteRenderer>().color = Color.red;
+						// We create a sprite to indicate the possibilty to lock on
+						GameObject newUIElement = Instantiate(lockUI, target.transform.position, Quaternion.identity, Canvas.transform);
+						// If one of these objects is the already locked target we draw the prefab with a different color
+						// We also update the index of the object and indicate the target still in sight
+						if (target == lockedObject)
+						{
+							stillLockedObjectOnSight = true;
+							lockedObjectIndex = lockableTargets.IndexOf(target);
+							newUIElement.GetComponent<SpriteRenderer>().color = Color.red;
+						}
+						// Each sprite is added to the list
+						lockableTargetsUIs.Add(newUIElement);
 					}
-					// Each sprite is added to the list
-					lockableTargetsUIs.Add(newUIElement);
 				}
+			}
+			else
+			{
+				lockableTargets.Remove(target);
 			}
 		}
 
@@ -101,8 +110,8 @@ public class LockOn : MonoBehaviour
 				{
 					lockedObjectIndex = 0;
 				}
+				lockedObject = lockableTargets[lockedObjectIndex];
 			}
-			lockedObject = lockableTargets[lockedObjectIndex];
 		}
 		if (Input.GetAxis("Lock") < 0.1)
 		{

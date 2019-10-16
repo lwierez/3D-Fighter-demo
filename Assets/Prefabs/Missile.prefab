@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1768869047606065708}
   - component: {fileID: 3943639717000767906}
   - component: {fileID: 3094646972301016517}
+  - component: {fileID: -3229833020274938779}
   m_Layer: 10
   m_Name: Missile
   m_TagString: Untagged
@@ -106,3 +107,19 @@ CapsuleCollider:
   m_Height: 0.079266
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0.011354998}
+--- !u!54 &-3229833020274938779
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768869047606065711}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
