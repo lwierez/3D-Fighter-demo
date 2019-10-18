@@ -11,6 +11,8 @@ public class Missile : MonoBehaviour
 
 	// Time since the missile lives
 	protected float timer = 0;
+	// Array with accepted layers
+	protected int[] destroyableLayers = { 11 };
 
     void Update()
     {
@@ -44,7 +46,16 @@ public class Missile : MonoBehaviour
 
 	void OnCollisionEnter(Collision collision)
 	{
+		int destroyable = 0;
+		int colliderLayer = collision.gameObject.layer;
+		foreach (int testedLayer in destroyableLayers)
+		{
+			destroyable += testedLayer == colliderLayer ? 1 : 0;
+		}
+		if (destroyable > 0)
+		{
+			Destroy(collision.gameObject);
+		}
 		Destroy(gameObject);
-		Destroy(collision.gameObject);
 	}
 }
