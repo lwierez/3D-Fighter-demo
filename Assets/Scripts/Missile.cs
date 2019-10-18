@@ -13,6 +13,8 @@ public class Missile : MonoBehaviour
 	protected float timer = 0;
 	// Array with accepted layers
 	protected int[] destroyableLayers = { 11 };
+	// Should the missile forward
+	protected bool isLaunched;
 
     void Update()
     {
@@ -26,13 +28,16 @@ public class Missile : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		// Make the missile follow the target
-		if (lockedObject != null)
+		if (isLaunched)
 		{
-			transform.LookAt(lockedObject.transform);
+			// Make the missile follow the target
+			if (lockedObject != null)
+			{
+				transform.LookAt(lockedObject.transform);
+			}
+			// Make the missile forward
+			transform.Translate(Vector3.forward * 50 * Time.deltaTime);
 		}
-		// Make the missile forward
-		transform.Translate(Vector3.forward * 50 * Time.deltaTime);
 	}
 
 	/// <summary>
@@ -57,5 +62,13 @@ public class Missile : MonoBehaviour
 			Destroy(collision.gameObject);
 		}
 		Destroy(gameObject);
+	}
+
+	/// <summary>
+	/// Trigger the missile porjection
+	/// </summary>
+	public void Launch()
+	{
+		this.isLaunched = true;
 	}
 }
