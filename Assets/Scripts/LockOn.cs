@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LockOn : MonoBehaviour
 {
 	// Canvas where ui object should be drown
 	public GameObject Canvas;
+	// Camera that is rendering the UI
+	public Camera camera;
 	// Prefab of the locking sprite
 	public GameObject lockUI;
 
@@ -65,14 +68,15 @@ public class LockOn : MonoBehaviour
 					if (raycastHit.collider.gameObject == target)
 					{
 						// We create a sprite to indicate the possibilty to lock on
-						GameObject newUIElement = Instantiate(lockUI, target.transform.position, Quaternion.identity, Canvas.transform);
+						GameObject newUIElement = Instantiate(lockUI, camera.WorldToScreenPoint(target.transform.position), Quaternion.identity, Canvas.transform);
+						newUIElement.transform.Translate(Vector3.back * newUIElement.transform.position.z);
 						// If one of these objects is the already locked target we draw the prefab with a different color
 						// We also update the index of the object and indicate the target still in sight
 						if (target == lockedObject)
 						{
 							stillLockedObjectOnSight = true;
 							lockedObjectIndex = lockableTargets.IndexOf(target);
-							newUIElement.GetComponent<SpriteRenderer>().color = Color.red;
+							newUIElement.GetComponent<Image>().color = Color.red;
 						}
 						// Each sprite is added to the list
 						lockableTargetsUIs.Add(newUIElement);

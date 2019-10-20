@@ -181,7 +181,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Canvas: {fileID: 1736264194}
-  lockUI: {fileID: 5348628589920202116, guid: 05192f5e12fcee54e8a4580df2aa496a, type: 3}
+  camera: {fileID: 1291770828}
+  lockUI: {fileID: 1686093180673712800, guid: 05192f5e12fcee54e8a4580df2aa496a, type: 3}
 --- !u!1 &290008328
 GameObject:
   m_ObjectHideFlags: 0
