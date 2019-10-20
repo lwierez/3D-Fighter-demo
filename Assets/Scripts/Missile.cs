@@ -14,7 +14,9 @@ public class Missile : MonoBehaviour
 	// Array with accepted layers
 	protected int[] destroyableLayers = { 11 };
 	// Should the missile forward
-	protected bool isLaunched;
+	protected bool isLaunched = false;
+	// Should fall
+	protected bool isFalling = false;
 
     void Update()
     {
@@ -37,6 +39,10 @@ public class Missile : MonoBehaviour
 			}
 			// Make the missile forward
 			transform.Translate(Vector3.forward * 50 * Time.deltaTime);
+		}
+		if (isFalling)
+		{
+			transform.Translate((Vector3.down * 1 + Vector3.forward * 20) * Time.deltaTime);
 		}
 	}
 
@@ -69,6 +75,14 @@ public class Missile : MonoBehaviour
 	/// </summary>
 	public void Launch()
 	{
+		StartCoroutine("DropMissile");
+	}
+
+	IEnumerator DropMissile()
+	{
+		this.isFalling = true;
+		yield return new WaitForSeconds(0.5f);
 		this.isLaunched = true;
+		this.isFalling = false;
 	}
 }
