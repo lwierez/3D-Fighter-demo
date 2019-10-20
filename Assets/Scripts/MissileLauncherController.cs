@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MissileLauncherController : MonoBehaviour
 {
 	// Missile prefab
 	public GameObject weapon;
+	// CanShoot image on UI
+	public Image CanShootUI;
 
 	// Delay between each missile shot
 	protected float missileDelay;
@@ -15,6 +18,8 @@ public class MissileLauncherController : MonoBehaviour
 	protected List<MissileLauncherUnit> missileLaunchersUnits;
 	// Shooting timer
 	protected float shootTimer = 0.0f;
+	// Roation verifications
+	bool isRotationCorrect;
 
 	void Start()
 	{
@@ -35,11 +40,21 @@ public class MissileLauncherController : MonoBehaviour
 
 	void Update()
 	{
+		isRotationCorrect = transform.parent.transform.rotation.eulerAngles.x < 40 || transform.parent.transform.rotation.eulerAngles.x > 320 && transform.parent.transform.rotation.eulerAngles.z < 40 || transform.parent.transform.rotation.eulerAngles.z > 320;
 		bool isReadyToShoot = shootTimer > 0.5f;
 
 		if (!isReadyToShoot)
 		{
 			shootTimer += Time.deltaTime;
+		}
+
+		if (isRotationCorrect)
+		{
+			CanShootUI.color = Color.green;
+		}
+		else
+		{
+			CanShootUI.color = Color.red;
 		}
 
 		if (Input.GetAxis("Shoot") > 0.6 && isReadyToShoot)
@@ -71,7 +86,7 @@ public class MissileLauncherController : MonoBehaviour
 	void Shoot()
 	{
 		// Instanciate and orientate the missile if a target is locked
-		if (lockOn.isTargetInSight())
+		if (lockOn.isTargetInSight() && isRotationCorrect)
 		{
 			bool missileFired = false;
 			foreach (MissileLauncherUnit missileLauncher in missileLaunchersUnits)
