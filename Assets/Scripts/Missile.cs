@@ -8,6 +8,8 @@ public class Missile : MonoBehaviour
 	protected const float lifetime = 120;
 	// Object locked by the missile
 	protected GameObject lockedObject;
+	// Particle emitter
+	public GameObject particleObject;
 
 	// Time since the missile lives
 	protected float timer = 0;
@@ -84,5 +86,6 @@ public class Missile : MonoBehaviour
 		yield return new WaitForSeconds(0.5f);
 		this.isLaunched = true;
 		this.isFalling = false;
+		particleObject.SetActive(true);
 	}
 }
