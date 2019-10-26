@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,5 +27,18 @@ public class PlayerController : MonoBehaviour
 		transform.Translate(Vector3.forward * speed * Time.deltaTime);
 		transform.Rotate(Vector3.right, rotationSpeedVertical * Time.deltaTime * verticalInput);
 		transform.Rotate(Vector3.back, rotationSpeedHorizontal * Time.deltaTime * horizontalInput);
+	}
+
+	void OnCollisionEnter(Collision other)
+	{
+		var emission = GetComponent<ParticleSystem>().emission;
+		emission.enabled = true;
+		StartCoroutine("KillPlayer");
+	}
+
+	IEnumerator KillPlayer()
+	{
+		yield return new WaitForSeconds(5.0f);
+		SceneManager.LoadScene(0);
 	}
 }
